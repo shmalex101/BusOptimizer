@@ -55,16 +55,15 @@ if __name__ == "__main__":
     trip = trip.withColumn('hour',hour(trip['max_time']))
     #compute trip duration
     trip = trip.withColumn("duration", timeDiff)
-    trip.withColumn("time_hour",hour(trip.min_time))
+    #filter out trips more than 20 min and less than 1400 min (~ 1 day)
     trip = trip.filter(trip.duration > 20).filter(trip.duration<1400)
-    
+    #stats for trip duration
     tripstat = trip.groupBy('route_id','hour'). \
         agg(F.min('duration').alias("min_dur"), \
             F.max('duration').alias("max_dur"), \
             F.avg('duration').alias("avg_dur"))
     #write_to_postgres(trip,'postgres')
-    trip.groupBy('route_id').groupby(trip.select(hour('ts').alias('hour'))).show(5,truncate=False)
-    tripstat.show(5)
+    #tripstat.show(5)
     write_to_postgres(tripstat,'tripstat')
     spark.stop()
     time_end = (time.time()-time_start)/60
