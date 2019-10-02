@@ -11,16 +11,17 @@ import pandas as pd
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-import sqlalchemy
+import dash_table
+from sqlalchemy.dialects import postgresql
 import psycopg2
 
 def connect():
-    '''Returns a connection and a metadata object'''
+    #Returns a connection and a metadata object
     # We connect with the help of the PostgreSQL URL
-    user = ''
-    password = ''
-    host = ''
-    db = ''
+    user = 'alex'
+    password = 'password'
+    host = 'ec2-100-20-48-52.us-west-2.compute.amazonaws.com'
+    db = 'postgres'
     port = 5432
     url = 'postgresql://{}:{}@{}:{}/{}'
     url = url.format(user, password, host, port, db)
@@ -34,28 +35,35 @@ def connect():
     return con
 
 con = connect()
-df =  pd.read_sql_query('SELECT * FROM tripstat LIMIT 12',con)
 
-def generate_table(dataframe, max_rows=10):
-    return html.Table(
-        # Header
-        [html.Tr([html.Th(col) for col in dataframe.columns])] +
+df = pd.read_sql_query('SELECT * FROM postgres LIMIT 10',con)
+app = dash.Dash(__name__)
 
-        # Body
-        [html.Tr([
-            html.Td(dataframe.iloc[i][col]) for col in dataframe.columns
-        ]) for i in range(min(len(dataframe), max_rows))]
-    )
+app.layout = html.Div([
+        dcc.Dropdown(id='dropdown', options=[
+            {'label': i, 'value': i} for i in df.inferred_route_id.values.tolist()
+            ], multi=False, placeholder='Route selection...'),
+    
+        dash_table.DataTable(
+                id='table',
+                columns=[{"name": i, "id": i} for i in df.columns])
+       ]) 
 
 
-external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
-
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-
-app.layout = html.Div(children=[
-    html.H4(children='Min, Max and Average Travel Timnes'),
-    generate_table(df)
-])
+@app.callback(
+    dash.dependencies.Output(component_id='table', component_property='data'),
+    [dash.dependencies.Input(component_id='dropdown', component_property='value')]
+)
+def update_output_div(dropdown_value):
+    con = connect()
+    if dropdown_value is None:
+        return df.to_dict('records')
+    
+    dff = pd.read_sql_query('SELECT * \
+                            FROM postgres\
+                            WHERE inferred_route_id = \''+str(dropdown_value)+ \
+                            '\' LIMIT 50',con)
+    return dff.to_dict('records')
 
 if __name__ == '__main__':
     app.run_server(debug=True)
