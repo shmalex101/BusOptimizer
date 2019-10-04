@@ -1,4 +1,5 @@
 # BusOptimizer
+Improving bus service through data
 
 ## Motivation
 Every day over 400,000 people in Seattle ride the bus. The majority of those people are on the bus for over two hours a day. Everyone wants to improve bus service, but where do you start? Most organizations keep bus gps data, but this can add up to over 400 GB per year. For my insight data engineering project I built a data pipeline to help transit companies utilize this data and help them focus on the bus routes most in need of improvement. This tool is not only useful for public transit, but can be used with any transit fleet equipped with real-time GPS data like delivery services, shipping companies and ride-share services.
