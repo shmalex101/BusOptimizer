@@ -36,12 +36,14 @@ def connect():
 
 con = connect()
 
-df = pd.read_sql_query('SELECT * FROM tripstat LIMIT 50',con)
+#make dropdown items unique
+df = pd.read_sql_query('SELECT * FROM tripstat2 LIMIT 316',con).sort_values(by=['route_id'])
+routeid = df.route_id.unique()
 app = dash.Dash(__name__)
 
 app.layout = html.Div([
                 dcc.Dropdown(id='dropdown', options=[
-                    {'label': i, 'value': i} for i in df.route_id.values.tolist()
+                    {'label': i, 'value': i} for i in routeid.tolist()
                     ], multi=False, placeholder='Route selection...',
     value='MTA NYCT_Q83'),
         
@@ -70,26 +72,12 @@ app.layout = html.Div([
 def update_figure(dropdown_value):
     con = connect()
     if dropdown_value is None:
+        dropdown_value = '\'MTA NYCT_Q83\''     
+    else:
         dff = pd.read_sql_query('SELECT * \
-                            FROM tripstat\
-                            WHERE route_id = \'MTA NYCT_Q83\'',con).sort_values(by=['hour']) 
-        x = dff.hour.to_list()   
-        y= dff.avg_dur.to_list()
-        dff = dff.to_dict('records')        
-        return {
-                'data': [{'x':x, \
-                          'y':y, \
-                          'type': 'bar', \
-                          'name': 'Avg'}],
-                'layout':go.Layout(xaxis={'title':'start time (hour)','range': [-0.5, 23.5]},
-                               yaxis={'title':'trip duration (min)'},
-                               title='Average Trip Duration').sort_values(by=['hour']) 
-        
-                }
-    dff = pd.read_sql_query('SELECT * \
-                            FROM tripstat\
-                            WHERE route_id = \''+str(dropdown_value)+ \
-                            '\'',con).sort_values(by=['hour']) 
+                                FROM tripstat2\
+                                WHERE route_id = \''+str(dropdown_value)+ \
+                                '\'',con).sort_values(by=['hour']) 
     x = dff.hour.to_list()   
     y= dff.avg_dur.to_list()
     dff = dff.to_dict('records')
@@ -102,7 +90,6 @@ def update_figure(dropdown_value):
                                yaxis={'title':'trip duration (min)'},
                                title='Average Trip Duration')
             }
-
 #Table Callback
 @app.callback(
     dash.dependencies.Output(component_id='table', component_property='data'),
@@ -114,7 +101,7 @@ def update_output_div(dropdown_value):
         return df.to_dict('records')
     
     dff = pd.read_sql_query('SELECT * \
-                            FROM tripstat\
+                            FROM tripstat2\
                             WHERE route_id = \''+str(dropdown_value)+ \
                             '\' LIMIT 50',con).round(1).sort_values(by=['hour']) 
     
