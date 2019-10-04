@@ -3,11 +3,11 @@
 ## Motivation
 Every day over 400,000 people in Seattle ride the bus. The majority of those people are on the bus for over two hours a day. Everyone wants to improve bus service, but where do you start? Most organizations keep bus gps data, but this can add up to over 400 GB per year. For my insight data engineering project I built a data pipeline to help transit companies utilize this data and help them focus on the bus routes most in need of improvement. This tool is not only useful for public transit, but can be used with any transit fleet equipped with real-time GPS data like delivery services, shipping companies and ride-share services.
 
-# Features
-
 # Tech Stack
 
 ![BusOptimizer tech stack](https://github.com/shmalex101/BusOptimizer/blob/master/tech_pipeline.png)
+
+The data starts with a pre-processing step where it is ingested from the MTA website to Spark (through PySpark) where it is converted from a .csv file format to parquet files. This does add some time, but in a real deployment the data would be downloaded and archived in a daily batch and run through the ETL pipeline in a large batch (multi-month or multi-year analysis). So, while adding time on the frontend, it will result in a large computational saving in the transofrmation stage.
 
 A few notes;
 * Postgres installed using [simply install: PostgreSQL](https://blog.insightdatascience.com/simply-install-postgresql-58c1e4ebf252) from the insight blog
