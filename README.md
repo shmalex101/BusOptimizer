@@ -14,4 +14,6 @@ https://blog.insightdatascience.com/how-to-get-hadoop-and-spark-up-and-running-o
 
 ## Data Source
 
-The [historical bus data](http://web.mta.info/developers/MTA-Bus-Time-historical-data.html) was provided by the New York City MTA. The data is archived as compressed .csv files and was downloaded using Python and Pyspark. The compressed files were unpacked, converted to Parquet files and moved into an S3 bucket. 
+The [historical bus data](http://web.mta.info/developers/MTA-Bus-Time-historical-data.html) was made available by the New York City MTA. The data is archived as compressed .csv files and was downloaded using Python and Pyspark. The compressed files were unpacked, converted to Parquet files and moved into an S3 bucket. 
+
+The dataset contains archived MTA Bus Time Data from August 1, 2014 through October 31, 2014 with data for each day saved to a single file for a total of 90 files. The entire dataset adds up to approximately 70 GB.
