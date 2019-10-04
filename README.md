@@ -7,7 +7,7 @@ Every day over 400,000 people in Seattle ride the bus. The majority of those peo
 
 # Tech Stack
 
-![BusOptimizer tech stack](https://github.com/shmalex101/BusOptimizer/blob/master/tech_pipeline.png){:height="25%" width="25%"}
+![BusOptimizer tech stack](https://github.com/shmalex101/BusOptimizer/blob/master/tech_pipeline.png)
 
 A few notes;
 * Postgres installed using [simply install: PostgreSQL](https://blog.insightdatascience.com/simply-install-postgresql-58c1e4ebf252) from the insight blog
