@@ -13,12 +13,12 @@ from pyspark.sql import DataFrameWriter
 class PostgresConnector(object):
     """class to connect to postgres database """
     def __init__(self):
-        self.database_name = 'postgres'
-        self.hostname = 'ec2-100-20-48-52.us-west-2.compute.amazonaws.com'
+        self.database_name = os.environ["DATABASE_NAME"]
+        self.hostname = os.environ["HOSTNAME"]
         self.url_connect = "jdbc:postgresql://{hostname}:5432/{db}" \
             .format(hostname=self.hostname, db=self.database_name)
-        self.properties = {"user":'alex',
-                           "password":'password',
+        self.properties = {"user":os.environ["USER"],
+                           "password":os.environ["PASSWORD"],
                            "driver": "org.postgresql.Driver"
                           }
 
