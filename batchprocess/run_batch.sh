@@ -8,7 +8,7 @@ export POSTGRES_PASSWORD="user password"
 
 # command to run batch_process.py
 # *** replace <DNS> with DNS for ec2 spark master instance 
-spark-submit --master spark:<DNS>:7077 --packages org.postgresql:postgresql:42.1.1 --executor-memory 1g  --driver-memory 1gbatch_process.py
+spark-submit --master spark:<DNS>:7077 --packages org.postgresql:postgresql:42.1.1 --executor-memory 1g  --driver-memory 1g batch_process.py
 
 # command to run batch_process_parquet.py
 # *** replace <DNS> with DNS for ec2 spark master instance 
